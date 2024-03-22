@@ -7,10 +7,10 @@ namespace Reddit.Controllers;
 [ApiController]
 public class CommunityController : ControllerBase
 {
-    private readonly ApplcationDBContext _context;
+    private readonly ApplicationDBContext _context;
     private readonly IMapper _mapper;
     
-    CommunityController(ApplcationDBContext context, IMapper mapper)
+    CommunityController(ApplicationDBContext context, IMapper mapper)
     {
         _context = context;
         _mapper = mapper;
