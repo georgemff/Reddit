@@ -40,7 +40,7 @@ public class CommunityController : ControllerBase
     }
     
     [HttpPost]
-    public async Task<ActionResult<Community>> PostPost(CreateCommunityDto createCommunityDto)
+    public async Task<ActionResult<Community>> AddPostToCommunity(CreateCommunityDto createCommunityDto)
     {
         var community = _mapper.toCommunity(createCommunityDto);
 

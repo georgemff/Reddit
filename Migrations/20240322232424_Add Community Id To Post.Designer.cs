@@ -24,20 +24,6 @@ namespace Reddit.Migrations
                 .HasAnnotation("Proxies:CheckEquality", false)
                 .HasAnnotation("Proxies:LazyLoading", true);
 
-            modelBuilder.Entity("CommunityUser", b =>
-                {
-                    b.Property<int>("CommunitiesId")
-                        .HasColumnType("INTEGER");
-
-                    b.Property<int>("SubscriberUsersId")
-                        .HasColumnType("INTEGER");
-
-                    b.HasKey("CommunitiesId", "SubscriberUsersId");
-
-                    b.HasIndex("SubscriberUsersId");
-
-                    b.ToTable("CommunityUser");
-                });
 
             modelBuilder.Entity("Reddit.Models.Comment", b =>
                 {
@@ -151,21 +137,6 @@ namespace Reddit.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Users");
-                });
-
-            modelBuilder.Entity("CommunityUser", b =>
-                {
-                    b.HasOne("Reddit.Models.Community", null)
-                        .WithMany()
-                        .HasForeignKey("CommunitiesId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("Reddit.Models.User", null)
-                        .WithMany()
-                        .HasForeignKey("SubscriberUsersId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
                 });
 
             modelBuilder.Entity("Reddit.Models.Comment", b =>

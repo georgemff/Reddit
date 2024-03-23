@@ -46,40 +46,11 @@ namespace Reddit.Migrations
                     table.PrimaryKey("PK_CommunitySubscribers", x => x.Id);
                 });
 
-            migrationBuilder.CreateTable(
-                name: "CommunityUser",
-                columns: table => new
-                {
-                    CommunitiesId = table.Column<int>(type: "INTEGER", nullable: false),
-                    SubscriberUsersId = table.Column<int>(type: "INTEGER", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_CommunityUser", x => new { x.CommunitiesId, x.SubscriberUsersId });
-                    table.ForeignKey(
-                        name: "FK_CommunityUser_Communities_CommunitiesId",
-                        column: x => x.CommunitiesId,
-                        principalTable: "Communities",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_CommunityUser_Users_SubscriberUsersId",
-                        column: x => x.SubscriberUsersId,
-                        principalTable: "Users",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
             migrationBuilder.CreateIndex(
                 name: "IX_Posts_CommunityId",
                 table: "Posts",
                 column: "CommunityId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_CommunityUser_SubscriberUsersId",
-                table: "CommunityUser",
-                column: "SubscriberUsersId");
-
+            
             migrationBuilder.AddForeignKey(
                 name: "FK_Posts_Communities_CommunityId",
                 table: "Posts",
@@ -98,8 +69,6 @@ namespace Reddit.Migrations
             migrationBuilder.DropTable(
                 name: "CommunitySubscribers");
 
-            migrationBuilder.DropTable(
-                name: "CommunityUser");
 
             migrationBuilder.DropTable(
                 name: "Communities");

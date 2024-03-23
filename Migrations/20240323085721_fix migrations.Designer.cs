@@ -11,8 +11,8 @@ using Reddit;
 namespace Reddit.Migrations
 {
     [DbContext(typeof(ApplicationDBContext))]
-    [Migration("20240322230817_Add Community And Subscribers")]
-    partial class AddCommunityAndSubscribers
+    [Migration("20240323085721_fix migrations")]
+    partial class fixmigrations
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -23,7 +23,21 @@ namespace Reddit.Migrations
                 .HasAnnotation("Proxies:ChangeTracking", false)
                 .HasAnnotation("Proxies:CheckEquality", false)
                 .HasAnnotation("Proxies:LazyLoading", true);
-            
+
+            modelBuilder.Entity("CommunityUser", b =>
+                {
+                    b.Property<int>("CommunitiesId")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int>("SubscriberUsersId")
+                        .HasColumnType("INTEGER");
+
+                    b.HasKey("CommunitiesId", "SubscriberUsersId");
+
+                    b.HasIndex("SubscriberUsersId");
+
+                    b.ToTable("CommunityUser");
+                });
 
             modelBuilder.Entity("Reddit.Models.Comment", b =>
                 {
@@ -45,6 +59,9 @@ namespace Reddit.Migrations
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int>("AuthorId")
                         .HasColumnType("INTEGER");
 
                     b.Property<DateTime>("CreatedAt")
@@ -134,6 +151,21 @@ namespace Reddit.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Users");
+                });
+
+            modelBuilder.Entity("CommunityUser", b =>
+                {
+                    b.HasOne("Reddit.Models.Community", null)
+                        .WithMany()
+                        .HasForeignKey("CommunitiesId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Reddit.Models.User", null)
+                        .WithMany()
+                        .HasForeignKey("SubscriberUsersId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("Reddit.Models.Comment", b =>
