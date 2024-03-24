@@ -13,7 +13,7 @@ public class Community
     public string Description { get; set; }
     public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
     public virtual ICollection<Post> Posts { get; set; } = new List<Post>();
-    public virtual ICollection<User> SubscriberUsers { get; set; } = new List<User>();
+    public virtual ICollection<CommunitySubscriber> SubscriberUsers { get; set; } = new List<CommunitySubscriber>();
 
 
 

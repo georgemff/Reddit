@@ -30,7 +30,6 @@ namespace Reddit.Controllers
             return Ok();
         }
 
-
         [HttpGet]
         public async Task<ActionResult<IEnumerable<User>>> GetAuthors()
         {

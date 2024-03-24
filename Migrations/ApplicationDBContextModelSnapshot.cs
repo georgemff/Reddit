@@ -2,7 +2,6 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
-using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Reddit;
 
@@ -11,11 +10,9 @@ using Reddit;
 namespace Reddit.Migrations
 {
     [DbContext(typeof(ApplicationDBContext))]
-    [Migration("20240322232424_Add Community Id To Post")]
-    partial class AddCommunityIdToPost
+    partial class ApplicationDBContextModelSnapshot : ModelSnapshot
     {
-        /// <inheritdoc />
-        protected override void BuildTargetModel(ModelBuilder modelBuilder)
+        protected override void BuildModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -23,7 +20,6 @@ namespace Reddit.Migrations
                 .HasAnnotation("Proxies:ChangeTracking", false)
                 .HasAnnotation("Proxies:CheckEquality", false)
                 .HasAnnotation("Proxies:LazyLoading", true);
-
 
             modelBuilder.Entity("Reddit.Models.Comment", b =>
                 {
@@ -61,7 +57,12 @@ namespace Reddit.Migrations
                         .IsRequired()
                         .HasColumnType("TEXT");
 
+                    b.Property<int?>("UserId")
+                        .HasColumnType("INTEGER");
+
                     b.HasKey("Id");
+
+                    b.HasIndex("UserId");
 
                     b.ToTable("Communities");
                 });
@@ -79,6 +80,8 @@ namespace Reddit.Migrations
                         .HasColumnType("INTEGER");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("CommunityId");
 
                     b.ToTable("CommunitySubscribers");
                 });
@@ -146,6 +149,22 @@ namespace Reddit.Migrations
                         .HasForeignKey("PostId");
                 });
 
+            modelBuilder.Entity("Reddit.Models.Community", b =>
+                {
+                    b.HasOne("Reddit.Models.User", null)
+                        .WithMany("Communities")
+                        .HasForeignKey("UserId");
+                });
+
+            modelBuilder.Entity("Reddit.Models.CommunitySubscriber", b =>
+                {
+                    b.HasOne("Reddit.Models.Community", null)
+                        .WithMany("SubscriberUsers")
+                        .HasForeignKey("CommunityId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
             modelBuilder.Entity("Reddit.Models.Post", b =>
                 {
                     b.HasOne("Reddit.Models.User", "Author")
@@ -162,6 +181,8 @@ namespace Reddit.Migrations
             modelBuilder.Entity("Reddit.Models.Community", b =>
                 {
                     b.Navigation("Posts");
+
+                    b.Navigation("SubscriberUsers");
                 });
 
             modelBuilder.Entity("Reddit.Models.Post", b =>
@@ -171,6 +192,8 @@ namespace Reddit.Migrations
 
             modelBuilder.Entity("Reddit.Models.User", b =>
                 {
+                    b.Navigation("Communities");
+
                     b.Navigation("Posts");
                 });
 #pragma warning restore 612, 618
