@@ -50,6 +50,26 @@ public class CommunityController : ControllerBase
         return CreatedAtAction("GetCommunity", new { id = community.Id }, community);
     }
 
+    [HttpPut("{id}")]
+    public async Task<ActionResult<Community>> UpdateCommunity(int id, UpdateCommunityDto updateCommunityDto)
+    {
+
+        var community = await _context.Communities.FindAsync(id);
+        if (community == null)
+        {
+            return NotFound();
+        }
+
+        community.Name = updateCommunityDto.Name;
+        community.Description = updateCommunityDto.Description;
+        
+        _context.Communities.Update(community);
+        await _context.SaveChangesAsync();
+
+        return community;
+
+    }
+
     [HttpDelete("{id}")]
     public async Task<IActionResult> DeleteCommunity(int id)
     {
