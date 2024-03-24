@@ -49,6 +49,22 @@ public class CommunityController : ControllerBase
 
         return CreatedAtAction("GetCommunity", new { id = community.Id }, community);
     }
+
+    [HttpDelete("{id}")]
+    public async Task<IActionResult> DeleteCommunity(int id)
+    {
+        var community = await _context.Communities.FindAsync(id);
+        if (community == null)
+        {
+            return NotFound();
+        }
+
+        _context.Communities.Remove(community);
+        await _context.SaveChangesAsync();
+
+        return NoContent();
+
+    }
     
     
 }
