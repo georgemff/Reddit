@@ -11,5 +11,7 @@ public class CommunitySubscriber
     public int UserId { get; set; }
     [ForeignKey(nameof(CommunityId))]
     public int CommunityId { get; set; }
-    
+
+    public virtual User User { get; set; } = new User();
+
 }

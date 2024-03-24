@@ -30,6 +30,29 @@ namespace Reddit.Controllers
             return Ok();
         }
 
+        [HttpPost("subscribe")]
+        public async Task<IActionResult> SubscribeToCommunity(SubscribeCommunityDto subscribeCommunityDto)
+        {
+            var community = await _context.Communities.FindAsync(subscribeCommunityDto.CommunityId);
+            var user = await _context.Users.FindAsync(subscribeCommunityDto.UserId);
+            
+            if (community == null || user == null)
+            {
+                return NotFound();
+            }
+
+            var subscriber = new CommunitySubscriber
+            {
+                CommunityId = subscribeCommunityDto.CommunityId,
+                UserId = subscribeCommunityDto.UserId
+            };
+
+            await _context.CommunitySubscribers.AddAsync(subscriber);
+            await _context.SaveChangesAsync();
+            
+            return NoContent();
+        }
+
         [HttpGet]
         public async Task<ActionResult<IEnumerable<User>>> GetAuthors()
         {
